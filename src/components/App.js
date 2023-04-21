@@ -11,7 +11,7 @@ import ImagePopup from './ImagePopup.js';
 import api from '../utils.js/Api.js';
 import { CurrentUserContext } from '../contexts/CurrentUserContext.js';
 import ProtectedRouteElement from "./ProtectedRoute.js";
-import { Route, Routes, useNavigate } from 'react-router-dom';
+import { Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import Register from './Register.js';
 import Login from './Login.js';
 import auth from '../utils.js/Auth.js';
@@ -148,8 +148,9 @@ function App() {
 
   function handleSignOut() {
     localStorage.removeItem("jwt");
+    setUserEmail(null);
     setIsLoggedIn(false);
-    navigate('/sign-in');
+    navigate("/sign-in", { replace: true });
   }
 
   function handleRegister(email, password) {
@@ -195,7 +196,6 @@ function App() {
         if (res) {
           setIsLoggedIn(true);
           navigate("/", { replace: true })
-          console.log(res)
           setUserEmail(res.data.email)
         }
       })
@@ -230,6 +230,9 @@ function App() {
           <Route path='/sign-up' element={<Register onRegister={handleRegister} />} />
 
           <Route path='/sign-in' element={<Login onLogin={handleLogin} />} />
+
+          <Route path="*" element={<Navigate to="/" />} />
+
 
         </Routes>
 
